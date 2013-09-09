@@ -1,0 +1,115 @@
+<project name="test-valid-innerclass-plugin" default="all">
+
+    <property name="cruise.dir" value="../.."/>
+    <property name="cruise.go.api.dir" value="${cruise.dir}/plugin-infra/target/go-plugin-api"/>
+    <property name="go.api.jar.name" value="go-plugin-api-13.3.0.jar"/>
+    <property name="cruise.go.api.jar" value="${cruise.go.api.dir}/${go.api.jar.name}"/>
+    <property name="target.dir" value="target"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="test.reports.dir" value="reports"/>
+
+    <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+        <classpath>
+            <path id="junit.test">
+                <fileset dir="." includes="tools/apache-ant-1.9.0/ant-junit.jar, lib/junit*.jar"/>
+            </path>
+        </classpath>
+    </taskdef>
+
+    <path id="compile.classpath">
+        <fileset dir="lib">
+            <include name="**/*.jar"/>
+        </fileset>
+        <pathelement location="${go.api.jar.name}"/>
+    </path>
+
+    <target name="all" depends="clean, recreate.go.api, compile.source, compile.test, dist"/>
+    <!-- DEV does not re-create go-api jar -->
+    <target name="dev" depends="clean, prepare.go.api, compile.source, compile.test, dist"/>
+
+    <target name="clean">
+        <delete dir="${target.dir}" description="Deletes the target directory"/>
+        <delete dir="${dist.dir}" description="Deletes the dist directory"/>
+        <delete dir="${test.reports.dir}" description="Deletes the test reports directory"/>
+    </target>
+
+    <target name="recreate.go.api">
+        <delete file="${go.api.jar.name}"/>
+        <antcall target="prepare.go.api"/>
+    </target>
+
+    <target name="-check.go.api.jar">
+        <available file="${go.api.jar.name}" type="file" property="local.go.api.jar.present"/>
+
+        <!-- THINGS WE HAVE TO DO TO PLEASE 'UNLESS' -->
+        <condition property='is.not.rebuilding.go.api.jar'>
+            <not>
+                <equals arg1="${local.go.api.jar.present}" arg2="true" />
+            </not>
+        </condition>
+        <antcall target="inform.user.of.outdated.api.jar" />
+    </target>
+
+    <target name="inform.user.of.outdated.api.jar" unless="is.not.rebuilding.go.api.jar">
+        <echo message="WARNING: SKIPPING BUILDING GO API JAR. YOU MIGHT BE RUNNING AGAINST AN OUTDATED EXISTING JAR." level="warning"/>
+    </target>
+
+    <target name="prepare.go.api" description="Builds and fetches the go-plugin-api.jar"
+            unless="local.go.api.jar.present"
+            depends="-check.go.api.jar">
+        <exec executable="${cruise.dir}/tools/jruby/bin/jruby" failonerror="true">
+            <arg line="-J-Xmx2048m -J-Xms1600m -S buildr cruise:plugin-infra:go-plugin-api:clean cruise:plugin-infra:go-plugin-api:package"/>
+        </exec>
+        <copy file="${cruise.go.api.jar}" todir="."/>
+    </target>
+
+    <target name="prepare" depends="clean,prepare.go.api">
+        <mkdir dir="${target.dir}"/>
+        <mkdir dir="${target.dir}/src"/>
+        <mkdir dir="${target.dir}/test"/>
+        <mkdir dir="${test.reports.dir}"/>
+    </target>
+
+    <target name="compile.source" depends="prepare">
+        <javac srcdir="src" destdir="${target.dir}/src" classpathref="compile.classpath" includeantruntime="false"/>
+    </target>
+
+    <target name="compile.test" depends="compile.source">
+        <javac srcdir="test" destdir="${target.dir}/test" includeantruntime="false">
+            <classpath refid="compile.classpath"/>
+            <classpath location="${target.dir}/src"/>
+        </javac>
+    </target>
+
+    <target name="test" depends="compile.test">
+        <junit failureproperty="test.failed">
+            <classpath>
+                <path refid="compile.classpath"/>
+                <pathelement location="${target.dir}/src"/>
+                <pathelement location="${target.dir}/test"/>
+            </classpath>
+            <formatter type="plain"/>
+            <batchtest fork="yes" todir="${test.reports.dir}">
+                <fileset dir="test">
+                    <include name="**/*Test*.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        <fail message="Test failure detected, check test results." if="test.failed"/>
+    </target>
+
+    <target name="dist" depends="compile.source">
+        <mkdir dir="${target.dir}/src/lib"/>
+        <copy todir="${target.dir}/src/lib" flatten="true">
+            <fileset dir="lib">
+                <exclude name="junit*.jar"/>
+                <exclude name="mockito*.jar"/>
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+        <basename property="jar.name" file="${basedir}"/>
+        <copy file="plugin.xml" todir="${target.dir}/src"/>
+        <mkdir dir="${dist.dir}"/>
+        <jar basedir="${target.dir}/src" destfile="${dist.dir}/${jar.name}.jar"/>
+    </target>
+</project>

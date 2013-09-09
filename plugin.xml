@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<go-plugin id="deb" version="1">
+    <about>
+        <name>Deb plugin</name>
+        <version>1.0.0</version>
+        <target-go-version>13.3</target-go-version>
+        <description>Plugin that polls a deb repository</description>
+        <vendor>
+            <name>Srinivas</name>
+            <url>https://github.com/srinivasupadhya/deb-repo-poller</url>
+        </vendor>
+        <target-os>
+            <value>Linux</value>
+        </target-os>
+    </about>
+</go-plugin>
+
