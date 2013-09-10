@@ -20,22 +20,22 @@ public class DebRepositoryPoller implements PackageMaterialPoller {
 
     public PackageRevision getLatestRevision(PackageConfiguration packagePluginConfiguration, RepositoryConfiguration repositoryPluginConfiguration) {
         validateData(repositoryPluginConfiguration, packagePluginConfiguration);
-        Property packageName = packagePluginConfiguration.get(Constants.PACKAGE_NAME);
-        Property versionSpec = packagePluginConfiguration.get(Constants.VERSION_SPEC);
-        Property architecture = packagePluginConfiguration.get(Constants.ARCHITECTURE);
+
         RepoUrl url = repoUrl(repositoryPluginConfiguration);
+        Property packageName = packagePluginConfiguration.get(Constants.PACKAGE_NAME);
+        String packageNameValue = packageName.getValue();
+        Property versionSpec = packagePluginConfiguration.get(Constants.VERSION_SPEC);
+        String versionSpecValue = versionSpec == null ? null : versionSpec.getValue();
+        Property architecture = packagePluginConfiguration.get(Constants.ARCHITECTURE);
+        String architectureValue = architecture == null ? null : architecture.getValue();
+
         url.checkConnection();
         PackageRevision packageRevision = null;
         try {
-            String versionSpecValue = null;
-            if (versionSpec != null)
-                versionSpecValue = versionSpec.getValue();
-            String architectureValue = null;
-            if (architecture != null)
-                architectureValue = architecture.getValue();
-            DebianRepoQuery debianRepoQuery = new DebianRepoQuery(url.getURL());
+            DebianRepoQuery debianRepoQuery = new DebianRepoQuery(url.getRepoMetadataUrl());
             debianRepoQuery.updateCacheIfRequired();
-            List<DebianPackage> debianPackages = debianRepoQuery.getDebianPackagesFor(packageName.getValue(), versionSpecValue, architectureValue);
+
+            List<DebianPackage> debianPackages = debianRepoQuery.getDebianPackagesFor(packageNameValue, versionSpecValue, architectureValue);
             if (debianPackages == null && debianPackages.isEmpty()) {
                 throw new RuntimeException("did not find any package matching requirements.");
             }
@@ -54,7 +54,7 @@ public class DebRepositoryPoller implements PackageMaterialPoller {
     public PackageRevision latestModificationSince(PackageConfiguration packagePluginConfiguration, RepositoryConfiguration repositoryPluginConfiguration, PackageRevision previouslyKnownRevision) {
         PackageRevision latestRevision = getLatestRevision(packagePluginConfiguration, repositoryPluginConfiguration);
 
-        if (latestRevision.getRevision() != previouslyKnownRevision.getRevision())
+        if (!latestRevision.getRevision().equals(previouslyKnownRevision.getRevision()))
             return latestRevision;
         return null;
     }

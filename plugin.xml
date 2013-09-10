@@ -9,9 +9,6 @@
             <name>Srinivas</name>
             <url>https://github.com/srinivasupadhya/deb-repo-poller</url>
         </vendor>
-        <target-os>
-            <value>Linux</value>
-        </target-os>
     </about>
 </go-plugin>
 
