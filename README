@@ -1,0 +1,2 @@
+Thoughtworks Go plugin to poll debain repository.
+Download dist/deb-repo-poller.jar & place it in <go-server-location>/plugins/external & restart Go Server.
