@@ -23,9 +23,9 @@
         <pathelement location="${go.api.jar.name}"/>
     </path>
 
-    <target name="all" depends="clean, recreate.go.api, compile.source, compile.test, dist"/>
+    <target name="all" depends="clean, recreate.go.api, compile.source, compile.test, test, dist"/>
     <!-- DEV does not re-create go-api jar -->
-    <target name="dev" depends="clean, prepare.go.api, compile.source, compile.test, dist"/>
+    <target name="dev" depends="clean, prepare.go.api, compile.source, compile.test, test, dist"/>
 
     <target name="clean">
         <delete dir="${target.dir}" description="Deletes the target directory"/>

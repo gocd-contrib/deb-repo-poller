@@ -18,7 +18,7 @@ public class DebRepositoryConfiguration implements PackageMaterialConfiguration 
 
     public RepositoryConfiguration getRepositoryConfiguration() {
         RepositoryConfiguration repositoryConfiguration = new RepositoryConfiguration();
-        repositoryConfiguration.addConfiguration(new Property(Constants.REPO_URL).with(DISPLAY_NAME, "Repository URL").with(DISPLAY_ORDER, 0));
+        repositoryConfiguration.add(new Property(Constants.REPO_URL).with(DISPLAY_NAME, "Repository URL").with(DISPLAY_ORDER, 0));
         //repositoryConfiguration.addConfiguration(new Property(Constants.USERNAME).with(REQUIRED, false).with(PART_OF_IDENTITY, false).with(DISPLAY_NAME, "User").with(DISPLAY_ORDER, 1));
         //repositoryConfiguration.addConfiguration(new Property(Constants.PASSWORD).with(REQUIRED, false).with(PART_OF_IDENTITY, false).with(SECURE, true).with(DISPLAY_NAME, "Password").with(DISPLAY_ORDER, 2));
         return repositoryConfiguration;
@@ -26,9 +26,9 @@ public class DebRepositoryConfiguration implements PackageMaterialConfiguration 
 
     public PackageConfiguration getPackageConfiguration() {
         PackageConfiguration packageConfiguration = new PackageConfiguration();
-        packageConfiguration.addConfiguration(new Property(Constants.PACKAGE_NAME).with(DISPLAY_NAME, "Package Name").with(DISPLAY_ORDER, 0));
-        packageConfiguration.addConfiguration(new Property(Constants.VERSION_SPEC).with(DISPLAY_NAME, "Version Spec").with(REQUIRED, false).with(DISPLAY_ORDER, 1));
-        packageConfiguration.addConfiguration(new Property(Constants.ARCHITECTURE).with(DISPLAY_NAME, "Architecture").with(REQUIRED, false).with(DISPLAY_ORDER, 2));
+        packageConfiguration.add(new Property(Constants.PACKAGE_NAME).with(DISPLAY_NAME, "Package Name").with(DISPLAY_ORDER, 0));
+        packageConfiguration.add(new Property(Constants.VERSION_SPEC).with(DISPLAY_NAME, "Version Spec").with(REQUIRED, false).with(DISPLAY_ORDER, 1));
+        packageConfiguration.add(new Property(Constants.ARCHITECTURE).with(DISPLAY_NAME, "Architecture").with(REQUIRED, false).with(DISPLAY_ORDER, 2));
         return packageConfiguration;
     }
 

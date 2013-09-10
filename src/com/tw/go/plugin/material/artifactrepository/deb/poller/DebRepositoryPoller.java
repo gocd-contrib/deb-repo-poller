@@ -28,26 +28,27 @@ public class DebRepositoryPoller implements PackageMaterialPoller {
         String versionSpecValue = versionSpec == null ? null : versionSpec.getValue();
         Property architecture = packagePluginConfiguration.get(Constants.ARCHITECTURE);
         String architectureValue = architecture == null ? null : architecture.getValue();
+        List<DebianPackage> debianPackages = null;
 
         url.checkConnection();
-        PackageRevision packageRevision = null;
+
         try {
             DebianRepoQuery debianRepoQuery = new DebianRepoQuery(url.getRepoMetadataUrl());
             debianRepoQuery.updateCacheIfRequired();
 
-            List<DebianPackage> debianPackages = debianRepoQuery.getDebianPackagesFor(packageNameValue, versionSpecValue, architectureValue);
-            if (debianPackages == null && debianPackages.isEmpty()) {
-                throw new RuntimeException("did not find any package matching requirements.");
-            }
-
-            DebianPackage debianPackage = debianPackages.get(0);
-            String revision = debianPackage.getName() + "." + debianPackage.getVersion() + "." + debianPackage.getArchitecture();
-            packageRevision = new PackageRevision(revision, new Date(), null);
-            packageRevision.addData(Constants.PACKAGE_LOCATION, url.getPackageLocation(debianPackage.getFilename()));
+            debianPackages = debianRepoQuery.getDebianPackagesFor(packageNameValue, versionSpecValue, architectureValue);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException("", e);
         }
+        if (debianPackages == null || debianPackages.isEmpty()) {
+            throw new RuntimeException(String.format("Error while querying repository with path '%s' and package '%s'.", url.getURL(), packageNameValue));
+        }
+
+        DebianPackage debianPackage = debianPackages.get(0);
+        String revision = debianPackage.getName() + "." + debianPackage.getVersion() + "." + debianPackage.getArchitecture();
+        PackageRevision packageRevision = new PackageRevision(revision, new Date(), null);
+        packageRevision.addData(Constants.PACKAGE_LOCATION, url.getPackageLocation(debianPackage.getFilename()));
+
         return packageRevision;
     }
 
