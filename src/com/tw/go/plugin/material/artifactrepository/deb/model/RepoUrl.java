@@ -66,7 +66,6 @@ public class RepoUrl {
         }
     }
 
-
     public String getUrlWithBasicAuth() {
         String localUrl = this.url;
         try {
@@ -100,5 +99,28 @@ public class RepoUrl {
 
     public String forDisplay() {
         return url;
+    }
+
+    public String getPackageLocation(String filePath) {
+        String packageLocation = null;
+        if (url.endsWith("/"))
+            packageLocation = url.substring(0, url.length() - 1);
+        else
+            packageLocation = url;
+        String[] parts = filePath.split("/");
+        for (int i = 0; i < parts.length; i++) {
+            if (!packageLocation.contains(parts[i])) {
+                packageLocation = merge(packageLocation, parts, i);
+                break;
+            }
+        }
+        return packageLocation;
+    }
+
+    private String merge(String packageLocation, String[] parts, int index) {
+        for (int i = index; i < parts.length; i++) {
+            packageLocation += "/" + parts[i];
+        }
+        return packageLocation;
     }
 }

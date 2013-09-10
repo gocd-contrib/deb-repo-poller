@@ -7,4 +7,5 @@ public class Constants {
     public static String PACKAGE_NAME = "PACKAGE_NAME";
     public static final String VERSION_SPEC = "VERSION_SPEC";
     public static final String ARCHITECTURE = "ARCHITECTURE";
+    public static String PACKAGE_LOCATION = "LOCATION";
 }

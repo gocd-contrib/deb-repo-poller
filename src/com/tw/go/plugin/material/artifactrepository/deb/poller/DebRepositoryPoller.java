@@ -43,7 +43,7 @@ public class DebRepositoryPoller implements PackageMaterialPoller {
             DebianPackage debianPackage = debianPackages.get(0);
             String revision = debianPackage.getName() + "." + debianPackage.getVersion() + "." + debianPackage.getArchitecture();
             packageRevision = new PackageRevision(revision, new Date(), null);
-            packageRevision.addData("FILE_DOWNLOAD", url.getURL() + debianPackage.getFilename());
+            packageRevision.addData(Constants.PACKAGE_LOCATION, url.getPackageLocation(debianPackage.getFilename()));
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("", e);
