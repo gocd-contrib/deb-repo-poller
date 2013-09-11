@@ -35,7 +35,6 @@ public class DebRepositoryPoller implements PackageMaterialPoller {
         try {
             DebianRepoQuery debianRepoQuery = new DebianRepoQuery(url.getRepoMetadataUrl());
             debianRepoQuery.updateCacheIfRequired();
-
             debianPackages = debianRepoQuery.getDebianPackagesFor(packageNameValue, versionSpecValue, architectureValue);
         } catch (Exception e) {
             throw new RuntimeException("", e);
