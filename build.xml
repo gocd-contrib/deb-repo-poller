@@ -82,7 +82,7 @@
     </target>
 
     <target name="test" depends="compile.test">
-        <junit failureproperty="test.failed">
+        <junit printsummary="yes" failureproperty="test.failed">
             <classpath>
                 <path refid="compile.classpath"/>
                 <pathelement location="${target.dir}/src"/>
