@@ -70,7 +70,7 @@ public class DebRepositoryPoller implements PackageMaterialPoller {
             url.checkConnection();
             return new Result().withSuccessMessages(String.format("Successfully accessed repository metadata at %s", url.getRepoMetadataUrl()));
         } catch (Exception e) {
-            LOGGER.warn(String.format("[Yum Repo Check Connection] Check connection for %s failed with exception - %s", url.getRepoMetadataUrl(), e));
+            LOGGER.warn(String.format("[Deb Repo Check Connection] Check connection for %s failed with exception - %s", url.getRepoMetadataUrl(), e));
             return new Result().withErrorMessages(String.format("Could not access file - %s. %s", url.getRepoMetadataUrl(), e.getMessage()));
         }
     }
@@ -88,9 +88,8 @@ public class DebRepositoryPoller implements PackageMaterialPoller {
             PackageRevision latestRevision = getLatestRevision(packageConfigurations, repositoryPackageConfigurations);
             return new Result().withSuccessMessages(String.format("Found package '%s'.", latestRevision.getRevision()));
         } catch (Exception e) {
-            String message = String.format("Could not find any package that matched requirements.");
-            LOGGER.warn(message);
-            return new Result().withErrorMessages(message);
+            LOGGER.warn(String.format("[Deb Repo Check Connection] Check connection to package failed with exception - %s", e));
+            return new Result().withErrorMessages("Could not find any package that matched requirements.");
         }
     }
 

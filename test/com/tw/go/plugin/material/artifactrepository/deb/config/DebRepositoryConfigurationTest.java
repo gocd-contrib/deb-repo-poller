@@ -21,16 +21,16 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 public class DebRepositoryConfigurationTest {
-    private DebRepositoryConfiguration yumRepositoryConfiguration;
+    private DebRepositoryConfiguration debRepositoryConfiguration;
 
     @Before
     public void setUp() {
-        yumRepositoryConfiguration = new DebRepositoryConfiguration();
+        debRepositoryConfiguration = new DebRepositoryConfiguration();
     }
 
     @Test
     public void shouldGetRepositoryConfiguration() {
-        RepositoryConfiguration configurations = yumRepositoryConfiguration.getRepositoryConfiguration();
+        RepositoryConfiguration configurations = debRepositoryConfiguration.getRepositoryConfiguration();
         assertThat(configurations.get(REPO_URL), is(notNullValue()));
         assertThat(configurations.get(Constants.REPO_URL).getOption(Property.SECURE), is(false));
         assertThat(configurations.get(Constants.REPO_URL).getOption(Property.PART_OF_IDENTITY), is(true));
@@ -55,7 +55,7 @@ public class DebRepositoryConfigurationTest {
 
     @Test
     public void shouldGetPackageConfiguration() {
-        PackageConfiguration configurations = yumRepositoryConfiguration.getPackageConfiguration();
+        PackageConfiguration configurations = debRepositoryConfiguration.getPackageConfiguration();
         assertThat(configurations.get(PACKAGE_NAME), is(notNullValue()));
         assertThat(configurations.get(Constants.PACKAGE_NAME).getOption(Property.SECURE), is(false));
         assertThat(configurations.get(Constants.PACKAGE_NAME).getOption(Property.PART_OF_IDENTITY), is(true));
@@ -128,7 +128,7 @@ public class DebRepositoryConfigurationTest {
         PackageConfiguration packageConfigurations = packageConfigurations(PACKAGE_NAME, "go-agent");
 
         try {
-            yumRepositoryConfiguration.testConnection(packageConfigurations, repositoryConfigurations);
+            debRepositoryConfiguration.testConnection(packageConfigurations, repositoryConfigurations);
         } catch (Exception e) {
             fail("");
         }
@@ -140,7 +140,7 @@ public class DebRepositoryConfigurationTest {
         PackageConfiguration packageConfigurations = packageConfigurations(PACKAGE_NAME, "go-agent");
 
         try {
-            yumRepositoryConfiguration.testConnection(packageConfigurations, repositoryConfigurations);
+            debRepositoryConfiguration.testConnection(packageConfigurations, repositoryConfigurations);
             fail("");
         } catch (RuntimeException e) {
             assertThat(e.getMessage(), is("Test Connection failed."));
@@ -148,14 +148,14 @@ public class DebRepositoryConfigurationTest {
     }
 
     private void assertForRepositoryConfigurationErrors(RepositoryConfiguration repositoryConfigurations, List<ValidationError> expectedErrors, boolean expectedValidationResult) {
-        ValidationResult validationResult = yumRepositoryConfiguration.isRepositoryConfigurationValid(repositoryConfigurations);
+        ValidationResult validationResult = debRepositoryConfiguration.isRepositoryConfigurationValid(repositoryConfigurations);
         assertThat(validationResult.isSuccessful(), is(expectedValidationResult));
         assertThat(validationResult.getErrors().size(), is(expectedErrors.size()));
         assertThat(validationResult.getErrors().containsAll(expectedErrors), is(true));
     }
 
     private void assertForPackageConfigurationErrors(PackageConfiguration packageConfigurations, List<ValidationError> expectedErrors, boolean expectedValidationResult) {
-        ValidationResult validationResult = yumRepositoryConfiguration.isPackageConfigurationValid(packageConfigurations, new RepositoryConfiguration());
+        ValidationResult validationResult = debRepositoryConfiguration.isPackageConfigurationValid(packageConfigurations, new RepositoryConfiguration());
         assertThat(validationResult.isSuccessful(), is(expectedValidationResult));
         assertThat(validationResult.getErrors().size(), is(expectedErrors.size()));
         assertThat(validationResult.getErrors().containsAll(expectedErrors), is(true));
