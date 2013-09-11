@@ -10,7 +10,7 @@ import static org.junit.Assert.fail;
 public class HttpConnectionCheckerTest {
     @Test
     public void shouldNotThrowExceptionIfCheckConnectionToTheRepoPasses() {
-        new HttpConnectionChecker().checkConnection("http://in.archive.ubuntu.com/ubuntu/dists/hardy/main/binary-amd64/", new Credentials(null, null));
+        new HttpConnectionChecker().checkConnection("http://in.archive.ubuntu.com/ubuntu/dists/saucy/main/binary-arm64/", new Credentials(null, null));
     }
 
     @Test

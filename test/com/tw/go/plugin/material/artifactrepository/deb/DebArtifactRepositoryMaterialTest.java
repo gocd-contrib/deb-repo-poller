@@ -14,7 +14,7 @@ import static org.junit.Assert.assertThat;
 
 public class DebArtifactRepositoryMaterialTest {
     @Test
-    public void shouldGetYumRepositoryConfig() {
+    public void shouldGetDebRepositoryConfig() {
         DebArtifactRepositoryMaterial repositoryMaterial = new DebArtifactRepositoryMaterial();
         PackageMaterialConfiguration repositoryConfiguration = repositoryMaterial.getConfig();
         assertThat(repositoryConfiguration, is(notNullValue()));
@@ -22,7 +22,7 @@ public class DebArtifactRepositoryMaterialTest {
     }
 
     @Test
-    public void shouldGetYumRepositoryPoller() {
+    public void shouldGetDebRepositoryPoller() {
         DebArtifactRepositoryMaterial repositoryMaterial = new DebArtifactRepositoryMaterial();
         PackageMaterialPoller poller = repositoryMaterial.getPoller();
         assertThat(poller, is(notNullValue()));
