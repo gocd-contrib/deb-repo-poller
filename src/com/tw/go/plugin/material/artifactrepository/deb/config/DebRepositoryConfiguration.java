@@ -26,7 +26,7 @@ public class DebRepositoryConfiguration implements PackageMaterialConfiguration 
 
     public PackageConfiguration getPackageConfiguration() {
         PackageConfiguration packageConfiguration = new PackageConfiguration();
-        packageConfiguration.add(new Property(Constants.PACKAGE_NAME).with(DISPLAY_NAME, "Package Name").with(DISPLAY_ORDER, 0));
+        packageConfiguration.add(new Property(Constants.PACKAGE_NAME).with(DISPLAY_NAME, "Debian Package Name").with(DISPLAY_ORDER, 0));
         packageConfiguration.add(new Property(Constants.VERSION_SPEC).with(DISPLAY_NAME, "Version Spec").with(REQUIRED, false).with(DISPLAY_ORDER, 1));
         packageConfiguration.add(new Property(Constants.ARCHITECTURE).with(DISPLAY_NAME, "Architecture").with(REQUIRED, false).with(DISPLAY_ORDER, 2));
         return packageConfiguration;
@@ -41,7 +41,16 @@ public class DebRepositoryConfiguration implements PackageMaterialConfiguration 
         //Property password = repositoryConfiguration.get(Constants.PASSWORD);
 
         if (repositoryUrl == null) {
-            validationResult.addError(new ValidationError(Constants.REPO_URL, "Repository url not specified"));
+            validationResult.addError(new ValidationError(Constants.REPO_URL, "Repository URL not specified"));
+            return validationResult;
+        }
+        String repositoryUrlValue = repositoryUrl.getValue();
+        if (repositoryUrlValue == null) {
+            validationResult.addError(new ValidationError(Constants.REPO_URL, "Repository URL is null"));
+            return validationResult;
+        }
+        if (isBlank(repositoryUrlValue.trim())) {
+            validationResult.addError(new ValidationError(Constants.REPO_URL, "Repository URL is empty"));
             return validationResult;
         }
         //String usernameValue = username == null ? null : username.getValue();
@@ -56,16 +65,16 @@ public class DebRepositoryConfiguration implements PackageMaterialConfiguration 
         validateKeys(getPackageConfiguration(), packageConfiguration, validationResult);
         Property artifactIdConfiguration = packageConfiguration.get(Constants.PACKAGE_NAME);
         if (artifactIdConfiguration == null) {
-            validationResult.addError(new ValidationError(Constants.PACKAGE_NAME, "Package Name not specified"));
+            validationResult.addError(new ValidationError(Constants.PACKAGE_NAME, "Debian Package Name not specified"));
             return validationResult;
         }
         String packageSpec = artifactIdConfiguration.getValue();
         if (packageSpec == null) {
-            validationResult.addError(new ValidationError(Constants.PACKAGE_NAME, "Package Name is null"));
+            validationResult.addError(new ValidationError(Constants.PACKAGE_NAME, "Debian Package Name is null"));
             return validationResult;
         }
         if (isBlank(packageSpec.trim())) {
-            validationResult.addError(new ValidationError(Constants.PACKAGE_NAME, "Package Name is empty"));
+            validationResult.addError(new ValidationError(Constants.PACKAGE_NAME, "Debian Package Name is empty"));
             return validationResult;
         }
         return validationResult;

@@ -60,7 +60,7 @@ public class DebRepositoryConfigurationTest {
         assertThat(configurations.get(Constants.PACKAGE_NAME).getOption(Property.SECURE), is(false));
         assertThat(configurations.get(Constants.PACKAGE_NAME).getOption(Property.PART_OF_IDENTITY), is(true));
         assertThat(configurations.get(Constants.PACKAGE_NAME).getOption(Property.REQUIRED), is(true));
-        assertThat(configurations.get(Constants.PACKAGE_NAME).getOption(Property.DISPLAY_NAME), is("Package Name"));
+        assertThat(configurations.get(Constants.PACKAGE_NAME).getOption(Property.DISPLAY_NAME), is("Debian Package Name"));
         assertThat(configurations.get(Constants.PACKAGE_NAME).getOption(Property.DISPLAY_ORDER), is(0));
         assertThat(configurations.get(VERSION_SPEC), is(notNullValue()));
         assertThat(configurations.get(Constants.VERSION_SPEC).getOption(Property.SECURE), is(false));
@@ -78,18 +78,18 @@ public class DebRepositoryConfigurationTest {
 
     @Test
     public void shouldCorrectlyCheckIfRepositoryConfigurationValid() {
-        assertForRepositoryConfigurationErrors(new RepositoryConfiguration(), asList(new ValidationError(REPO_URL, "Repository url not specified")), false);
-        assertForRepositoryConfigurationErrors(repoConfigurations(REPO_URL, null), asList(new ValidationError(REPO_URL, "Repository url is empty")), false);
-        assertForRepositoryConfigurationErrors(repoConfigurations(REPO_URL, ""), asList(new ValidationError(REPO_URL, "Repository url is empty")), false);
+        assertForRepositoryConfigurationErrors(new RepositoryConfiguration(), asList(new ValidationError(REPO_URL, "Repository URL not specified")), false);
+        assertForRepositoryConfigurationErrors(repoConfigurations(REPO_URL, null), asList(new ValidationError(REPO_URL, "Repository URL is null")), false);
+        assertForRepositoryConfigurationErrors(repoConfigurations(REPO_URL, ""), asList(new ValidationError(REPO_URL, "Repository URL is empty")), false);
         assertForRepositoryConfigurationErrors(repoConfigurations(REPO_URL, "incorrectUrl"), asList(new ValidationError(REPO_URL, "Invalid URL : incorrectUrl")), false);
         assertForRepositoryConfigurationErrors(repoConfigurations(REPO_URL, "http://correct.com/url"), new ArrayList<ValidationError>(), true);
     }
 
     @Test
     public void shouldCorrectlyCheckIfPackageConfigurationValid() {
-        assertForPackageConfigurationErrors(new PackageConfiguration(), asList(new ValidationError(PACKAGE_NAME, "Package Name not specified")), false);
-        assertForPackageConfigurationErrors(packageConfigurations(PACKAGE_NAME, null), asList(new ValidationError(PACKAGE_NAME, "Package Name is null")), false);
-        assertForPackageConfigurationErrors(packageConfigurations(PACKAGE_NAME, ""), asList(new ValidationError(PACKAGE_NAME, "Package Name is empty")), false);
+        assertForPackageConfigurationErrors(new PackageConfiguration(), asList(new ValidationError(PACKAGE_NAME, "Debian Package Name not specified")), false);
+        assertForPackageConfigurationErrors(packageConfigurations(PACKAGE_NAME, null), asList(new ValidationError(PACKAGE_NAME, "Debian Package Name is null")), false);
+        assertForPackageConfigurationErrors(packageConfigurations(PACKAGE_NAME, ""), asList(new ValidationError(PACKAGE_NAME, "Debian Package Name is empty")), false);
         assertForPackageConfigurationErrors(packageConfigurations(PACKAGE_NAME, "go-age?nt-*"), new ArrayList<ValidationError>(), true);
         assertForPackageConfigurationErrors(packageConfigurations(PACKAGE_NAME, "go-agent"), new ArrayList<ValidationError>(), true);
     }
@@ -99,8 +99,8 @@ public class DebRepositoryConfigurationTest {
         ValidationResult validationResult = new ValidationResult();
         new DebRepositoryConfiguration().validate(new PackageConfiguration(), new RepositoryConfiguration(), validationResult);
         assertThat(validationResult.isSuccessful(), is(false));
-        assertThat(validationResult.getErrors().contains(new ValidationError(REPO_URL, "Repository url not specified")), is(true));
-        assertThat(validationResult.getErrors().contains(new ValidationError(PACKAGE_NAME, "Package Name not specified")), is(true));
+        assertThat(validationResult.getErrors().contains(new ValidationError(REPO_URL, "Repository URL not specified")), is(true));
+        assertThat(validationResult.getErrors().contains(new ValidationError(PACKAGE_NAME, "Debian Package Name not specified")), is(true));
     }
 
     @Test

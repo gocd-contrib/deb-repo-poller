@@ -127,7 +127,7 @@ public class DebRepositoryPollerTest {
             poller.getLatestRevision(packagePackageConfigurations, repositoryPackageConfigurations);
             fail("");
         } catch (RuntimeException e) {
-            assertThat(e.getMessage(), is(("Repository url not specified")));
+            assertThat(e.getMessage(), is(("Repository URL not specified")));
         }
     }
 
@@ -142,7 +142,7 @@ public class DebRepositoryPollerTest {
             poller.getLatestRevision(packagePackageConfigurations, repositoryPackageConfigurations);
             fail("");
         } catch (RuntimeException e) {
-            assertThat(e.getMessage(), is(("Package Name not specified")));
+            assertThat(e.getMessage(), is(("Debian Package Name not specified")));
         }
     }
 
@@ -154,7 +154,7 @@ public class DebRepositoryPollerTest {
             poller.getLatestRevision(packagePackageConfigurations, repositoryPackageConfigurations);
             fail("");
         } catch (RuntimeException e) {
-            assertThat(e.getMessage(), is(("Repository url not specified; Package Name not specified")));
+            assertThat(e.getMessage(), is(("Repository URL not specified; Debian Package Name not specified")));
         }
     }
 
@@ -282,7 +282,7 @@ public class DebRepositoryPollerTest {
     public void shouldValidatePackageDataWhileTestingConnection() {
         Result result = poller.checkConnectionToPackage(new PackageConfiguration(), repositoryPackageConfigurations);
         assertThat(result.isSuccessful(), is(false));
-        assertThat(result.getMessagesForDisplay(), is("Package Name not specified"));
+        assertThat(result.getMessagesForDisplay(), is("Debian Package Name not specified"));
     }
 
     private long fromEpochTime(long timeInSeconds) {
