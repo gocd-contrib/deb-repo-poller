@@ -101,8 +101,8 @@ public class RepoUrlTest {
 
     @Test
     public void shouldNotThrowExceptionIfCheckConnectionToTheRepoPasses() {
-        new RepoUrl("http://in.archive.ubuntu.com/ubuntu/dists/saucy/main/binary-arm64/", null, null).checkConnection();
-        new RepoUrl("http://in.archive.ubuntu.com/ubuntu/dists/saucy/main/binary-arm64", null, null).checkConnection();
+        new RepoUrl("http://in.archive.ubuntu.com/ubuntu/dists/saucy/main/binary-amd64/", null, null).checkConnection();
+        new RepoUrl("http://in.archive.ubuntu.com/ubuntu/dists/saucy/main/binary-amd64", null, null).checkConnection();
     }
 
     @Test

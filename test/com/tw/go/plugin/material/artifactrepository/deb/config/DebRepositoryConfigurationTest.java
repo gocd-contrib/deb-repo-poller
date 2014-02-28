@@ -121,8 +121,8 @@ public class DebRepositoryConfigurationTest {
     }
 
     @Test
-    public void shouldCorrectlyTestConnectionGivenCorrectConfiguration() {
-        File sampleRepoDirectory = new File("test/repos/samplerepo");
+    public void shouldCorrectlyTestConnectionGivenCorrectConfiguration() throws Exception {
+        File sampleRepoDirectory = new File(getClass().getResource("/repos/samplerepo").toURI());
 
         RepositoryConfiguration repositoryConfigurations = repoConfigurations(REPO_URL, "file://" + sampleRepoDirectory.getAbsolutePath());
         PackageConfiguration packageConfigurations = packageConfigurations(PACKAGE_NAME, "go-agent");

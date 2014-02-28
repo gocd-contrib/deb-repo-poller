@@ -2,8 +2,8 @@
 <go-plugin id="deb" version="1">
     <about>
         <name>Deb plugin</name>
-        <version>1.0.0</version>
-        <target-go-version>13.3</target-go-version>
+        <version>13.4.1</version>
+        <target-go-version>13.4.1</target-go-version>
         <description>Plugin that polls a deb repository</description>
         <vendor>
             <name>Srinivas</name>
@@ -11,4 +11,3 @@
         </vendor>
     </about>
 </go-plugin>
-

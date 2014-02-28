@@ -30,10 +30,10 @@ public class DebRepositoryPollerTest {
     private String repoUrl;
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         repositoryPackageConfigurations = new RepositoryConfiguration();
 
-        sampleRepoDirectory = new File("test/repos/samplerepo");
+        sampleRepoDirectory = new File(getClass().getResource("/repos/samplerepo").toURI());
         repoUrl = "file://" + sampleRepoDirectory.getAbsolutePath();
         repositoryPackageConfigurations.add(new Property(Constants.REPO_URL, repoUrl));
 
@@ -101,9 +101,9 @@ public class DebRepositoryPollerTest {
     }
 
     @Test
-    public void shouldThrowExceptionGivenEmptyRepo_getLatestRevision() {
+    public void shouldThrowExceptionGivenEmptyRepo_getLatestRevision() throws Exception {
         RepositoryConfiguration repositoryPackageConfigurations = new RepositoryConfiguration();
-        File emptyRepo = new File("test/repos/emptyrepo");
+        File emptyRepo = new File(getClass().getResource("/repos/emptyrepo").toURI());
         repositoryPackageConfigurations.add(new Property(Constants.REPO_URL, "file://" + emptyRepo.getAbsolutePath()));
         PackageConfiguration packagePackageConfigurations = new PackageConfiguration();
         packagePackageConfigurations.add(new Property(Constants.PACKAGE_NAME, "crap-artifact"));
@@ -132,9 +132,9 @@ public class DebRepositoryPollerTest {
     }
 
     @Test
-    public void shouldPerformPackageConfigurationBeforeModificationCheck() {
+    public void shouldPerformPackageConfigurationBeforeModificationCheck() throws Exception {
         RepositoryConfiguration repositoryPackageConfigurations = new RepositoryConfiguration();
-        File emptyRepo = new File("test/repos/emptyrepo");
+        File emptyRepo = new File(getClass().getResource("/repos/emptyrepo").toURI());
         repositoryPackageConfigurations.add(new Property(Constants.REPO_URL, "file://" + emptyRepo.getAbsolutePath()));
 
         PackageConfiguration packagePackageConfigurations = new PackageConfiguration();
