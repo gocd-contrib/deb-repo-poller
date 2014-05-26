@@ -1,7 +1,8 @@
 package com.tw.go.plugin.material.artifactrepository.deb.config;
 
+import com.thoughtworks.go.plugin.api.config.Property;
 import com.thoughtworks.go.plugin.api.material.packagerepository.PackageConfiguration;
-import com.thoughtworks.go.plugin.api.material.packagerepository.Property;
+import com.thoughtworks.go.plugin.api.material.packagerepository.PackageMaterialProperty;
 import com.thoughtworks.go.plugin.api.material.packagerepository.RepositoryConfiguration;
 import com.thoughtworks.go.plugin.api.response.validation.ValidationError;
 import com.thoughtworks.go.plugin.api.response.validation.ValidationResult;
@@ -108,12 +109,12 @@ public class DebRepositoryConfigurationTest {
         ValidationResult validationResult = new ValidationResult();
         PackageConfiguration packageConfigurations = new PackageConfiguration();
         RepositoryConfiguration repositoryConfiguration = new RepositoryConfiguration();
-        packageConfigurations.add(new Property("PACKAGE_NAME", "foo"));
-        packageConfigurations.add(new Property("foo1", "foo"));
-        packageConfigurations.add(new Property("foo2", "foo"));
-        repositoryConfiguration.add(new Property("bar1", "bar"));
-        repositoryConfiguration.add(new Property("bar2", "bar"));
-        repositoryConfiguration.add(new Property("REPO_URL", "http://asdsa"));
+        packageConfigurations.add(new PackageMaterialProperty("PACKAGE_NAME", "foo"));
+        packageConfigurations.add(new PackageMaterialProperty("foo1", "foo"));
+        packageConfigurations.add(new PackageMaterialProperty("foo2", "foo"));
+        repositoryConfiguration.add(new PackageMaterialProperty("bar1", "bar"));
+        repositoryConfiguration.add(new PackageMaterialProperty("bar2", "bar"));
+        repositoryConfiguration.add(new PackageMaterialProperty("REPO_URL", "http://asdsa"));
         new DebRepositoryConfiguration().validate(packageConfigurations, repositoryConfiguration, validationResult);
         assertThat(validationResult.isSuccessful(), is(false));
         assertThat(validationResult.getErrors().contains(new ValidationError("", "Unsupported key(s) found : bar1, bar2. Allowed key(s) are : REPO_URL")), is(true));
@@ -163,13 +164,13 @@ public class DebRepositoryConfigurationTest {
 
     private PackageConfiguration packageConfigurations(String key, String value) {
         PackageConfiguration configurations = new PackageConfiguration();
-        configurations.add(new Property(key, value));
+        configurations.add(new PackageMaterialProperty(key, value));
         return configurations;
     }
 
     private RepositoryConfiguration repoConfigurations(String key, String value) {
         RepositoryConfiguration configurations = new RepositoryConfiguration();
-        configurations.add(new Property(key, value));
+        configurations.add(new PackageMaterialProperty(key, value));
         return configurations;
     }
 }

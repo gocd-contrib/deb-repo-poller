@@ -1,5 +1,6 @@
 package com.tw.go.plugin.material.artifactrepository.deb.poller;
 
+import com.thoughtworks.go.plugin.api.config.Property;
 import com.thoughtworks.go.plugin.api.logging.Logger;
 import com.thoughtworks.go.plugin.api.material.packagerepository.*;
 import com.thoughtworks.go.plugin.api.response.Result;

@@ -1,8 +1,8 @@
 package com.tw.go.plugin.material.artifactrepository.deb.poller;
 
 import com.thoughtworks.go.plugin.api.material.packagerepository.PackageConfiguration;
+import com.thoughtworks.go.plugin.api.material.packagerepository.PackageMaterialProperty;
 import com.thoughtworks.go.plugin.api.material.packagerepository.PackageRevision;
-import com.thoughtworks.go.plugin.api.material.packagerepository.Property;
 import com.thoughtworks.go.plugin.api.material.packagerepository.RepositoryConfiguration;
 import com.thoughtworks.go.plugin.api.response.Result;
 import com.tw.go.plugin.material.artifactrepository.deb.constants.Constants;
@@ -35,10 +35,10 @@ public class DebRepositoryPollerTest {
 
         sampleRepoDirectory = new File(getClass().getResource("/repos/samplerepo").toURI());
         repoUrl = "file://" + sampleRepoDirectory.getAbsolutePath();
-        repositoryPackageConfigurations.add(new Property(Constants.REPO_URL, repoUrl));
+        repositoryPackageConfigurations.add(new PackageMaterialProperty(Constants.REPO_URL, repoUrl));
 
         packagePackageConfigurations = new PackageConfiguration();
-        packagePackageConfigurations.add(new Property(Constants.PACKAGE_NAME, "go-agent"));
+        packagePackageConfigurations.add(new PackageMaterialProperty(Constants.PACKAGE_NAME, "go-agent"));
 
         poller = new DebRepositoryPoller();
     }
@@ -54,7 +54,7 @@ public class DebRepositoryPollerTest {
     @Test
     public void shouldThrowExceptionWhileGettingLatestRevisionIfCheckConnectionFails_getLatestRevision() {
         RepositoryConfiguration repositoryPackageConfigurations = new RepositoryConfiguration();
-        repositoryPackageConfigurations.add(new Property(Constants.REPO_URL, "file://foo/bar"));
+        repositoryPackageConfigurations.add(new PackageMaterialProperty(Constants.REPO_URL, "file://foo/bar"));
         try {
             poller.getLatestRevision(packagePackageConfigurations, repositoryPackageConfigurations);
         } catch (RuntimeException e) {
@@ -65,7 +65,7 @@ public class DebRepositoryPollerTest {
     @Test
     public void shouldGetTheRightLocationForAnyPackage_getLatestRevision() {
         PackageConfiguration ppc = new PackageConfiguration();
-        ppc.add(new Property(Constants.PACKAGE_NAME, "go-server"));
+        ppc.add(new PackageMaterialProperty(Constants.PACKAGE_NAME, "go-server"));
         PackageRevision latestRevision = poller.getLatestRevision(ppc, repositoryPackageConfigurations);
 
         assertThat(latestRevision.getRevision(), is("go-server.13.3.0-17921.all"));
@@ -75,9 +75,9 @@ public class DebRepositoryPollerTest {
     @Test
     public void shouldThrowExceptionGivenNonExistingRepo_getLatestRevision() {
         RepositoryConfiguration repositoryPackageConfigurations = new RepositoryConfiguration();
-        repositoryPackageConfigurations.add(new Property(Constants.REPO_URL, "file://crap-repo"));
+        repositoryPackageConfigurations.add(new PackageMaterialProperty(Constants.REPO_URL, "file://crap-repo"));
         PackageConfiguration packagePackageConfigurations = new PackageConfiguration();
-        packagePackageConfigurations.add(new Property(Constants.PACKAGE_NAME, "crap-artifact"));
+        packagePackageConfigurations.add(new PackageMaterialProperty(Constants.PACKAGE_NAME, "crap-artifact"));
         try {
             poller.getLatestRevision(packagePackageConfigurations, repositoryPackageConfigurations);
             fail("");
@@ -89,7 +89,7 @@ public class DebRepositoryPollerTest {
     @Test
     public void shouldThrowExceptionGivenNonExistingPackageInExistingRepo_getLatestRevision() {
         PackageConfiguration packagePackageConfigurations = new PackageConfiguration();
-        packagePackageConfigurations.add(new Property(Constants.PACKAGE_NAME, "crap-artifact"));
+        packagePackageConfigurations.add(new PackageMaterialProperty(Constants.PACKAGE_NAME, "crap-artifact"));
         try {
             poller.getLatestRevision(packagePackageConfigurations, repositoryPackageConfigurations);
             fail("");
@@ -104,9 +104,9 @@ public class DebRepositoryPollerTest {
     public void shouldThrowExceptionGivenEmptyRepo_getLatestRevision() throws Exception {
         RepositoryConfiguration repositoryPackageConfigurations = new RepositoryConfiguration();
         File emptyRepo = new File(getClass().getResource("/repos/emptyrepo").toURI());
-        repositoryPackageConfigurations.add(new Property(Constants.REPO_URL, "file://" + emptyRepo.getAbsolutePath()));
+        repositoryPackageConfigurations.add(new PackageMaterialProperty(Constants.REPO_URL, "file://" + emptyRepo.getAbsolutePath()));
         PackageConfiguration packagePackageConfigurations = new PackageConfiguration();
-        packagePackageConfigurations.add(new Property(Constants.PACKAGE_NAME, "crap-artifact"));
+        packagePackageConfigurations.add(new PackageMaterialProperty(Constants.PACKAGE_NAME, "crap-artifact"));
         try {
             poller.getLatestRevision(packagePackageConfigurations, repositoryPackageConfigurations);
             fail("");
@@ -122,7 +122,7 @@ public class DebRepositoryPollerTest {
         RepositoryConfiguration repositoryPackageConfigurations = new RepositoryConfiguration();
 
         PackageConfiguration packagePackageConfigurations = new PackageConfiguration();
-        packagePackageConfigurations.add(new Property(Constants.PACKAGE_NAME, "crap-artifact"));
+        packagePackageConfigurations.add(new PackageMaterialProperty(Constants.PACKAGE_NAME, "crap-artifact"));
         try {
             poller.getLatestRevision(packagePackageConfigurations, repositoryPackageConfigurations);
             fail("");
@@ -135,7 +135,7 @@ public class DebRepositoryPollerTest {
     public void shouldPerformPackageConfigurationBeforeModificationCheck() throws Exception {
         RepositoryConfiguration repositoryPackageConfigurations = new RepositoryConfiguration();
         File emptyRepo = new File(getClass().getResource("/repos/emptyrepo").toURI());
-        repositoryPackageConfigurations.add(new Property(Constants.REPO_URL, "file://" + emptyRepo.getAbsolutePath()));
+        repositoryPackageConfigurations.add(new PackageMaterialProperty(Constants.REPO_URL, "file://" + emptyRepo.getAbsolutePath()));
 
         PackageConfiguration packagePackageConfigurations = new PackageConfiguration();
         try {
@@ -200,8 +200,8 @@ public class DebRepositoryPollerTest {
     @Ignore
     @Test
     public void shouldThrowExceptionIfCredentialsHaveBeenProvidedAlongWithFileProtocol() {
-        repositoryPackageConfigurations.add(new Property(Constants.USERNAME, "loser"));
-        repositoryPackageConfigurations.add(new Property(Constants.PASSWORD, "pwd"));
+        repositoryPackageConfigurations.add(new PackageMaterialProperty(Constants.USERNAME, "loser"));
+        repositoryPackageConfigurations.add(new PackageMaterialProperty(Constants.PASSWORD, "pwd"));
         try {
             poller.getLatestRevision(packagePackageConfigurations, repositoryPackageConfigurations);
             fail("Should have failed");
@@ -220,7 +220,7 @@ public class DebRepositoryPollerTest {
     @Test
     public void shouldReturnErrorsWhenConnectionToRepoFails() throws Exception {
         RepositoryConfiguration repositoryPackageConfigurations = new RepositoryConfiguration();
-        repositoryPackageConfigurations.add(new Property(Constants.REPO_URL, "file://invalid_path"));
+        repositoryPackageConfigurations.add(new PackageMaterialProperty(Constants.REPO_URL, "file://invalid_path"));
 
         Result result = poller.checkConnectionToRepository(repositoryPackageConfigurations);
         assertThat(result.isSuccessful(), is(false));
@@ -230,7 +230,7 @@ public class DebRepositoryPollerTest {
     @Test
     public void shouldPerformRepoValidationsBeforeCheckConnection() throws Exception {
         RepositoryConfiguration repositoryPackageConfigurations = new RepositoryConfiguration();
-        repositoryPackageConfigurations.add(new Property(Constants.REPO_URL, "ftp://username:password@invalid_path"));
+        repositoryPackageConfigurations.add(new PackageMaterialProperty(Constants.REPO_URL, "ftp://username:password@invalid_path"));
 
         Result result = poller.checkConnectionToRepository(repositoryPackageConfigurations);
         assertThat(result.isSuccessful(), is(false));
@@ -249,7 +249,7 @@ public class DebRepositoryPollerTest {
     @Test
     public void shouldFailConnectionToPackageRepositoryIfPackageIsNotFound() {
         PackageConfiguration packageConfigurations = new PackageConfiguration();
-        packageConfigurations.add(new Property(Constants.PACKAGE_NAME, "go-a"));
+        packageConfigurations.add(new PackageMaterialProperty(Constants.PACKAGE_NAME, "go-a"));
         Result result = poller.checkConnectionToPackage(packageConfigurations, repositoryPackageConfigurations);
         assertThat(result.isSuccessful(), is(false));
         assertThat(result.getMessagesForDisplay(), is("Could not find any package that matched requirements."));
@@ -259,7 +259,7 @@ public class DebRepositoryPollerTest {
     @Test
     public void shouldFailConnectionToPackageRepositoryIfMultiplePackageIsFound() {
         PackageConfiguration packageConfigurations = new PackageConfiguration();
-        packageConfigurations.add(new Property(Constants.PACKAGE_NAME, "go*"));
+        packageConfigurations.add(new PackageMaterialProperty(Constants.PACKAGE_NAME, "go*"));
         Result result = poller.checkConnectionToPackage(packageConfigurations, repositoryPackageConfigurations);
         assertThat(result.isSuccessful(), is(false));
         String messagesForDisplay = result.getMessagesForDisplay();
@@ -272,7 +272,7 @@ public class DebRepositoryPollerTest {
     @Test
     public void shouldFailConnectionToPackageRepositoryIfRepositoryIsNotReachable() {
         RepositoryConfiguration repositoryConfigurations = new RepositoryConfiguration();
-        repositoryConfigurations.add(new Property(Constants.REPO_URL, "file://invalid_random_2q342340"));
+        repositoryConfigurations.add(new PackageMaterialProperty(Constants.REPO_URL, "file://invalid_random_2q342340"));
         Result result = poller.checkConnectionToPackage(packagePackageConfigurations, repositoryConfigurations);
         assertThat(result.isSuccessful(), is(false));
         assertThat(result.getMessagesForDisplay(), is("Could not access file - file://invalid_random_2q342340/Packages.gz. Invalid file path."));
