@@ -52,3 +52,4 @@ out/
 ######
 sample.db
 target/
+dist/
