@@ -11,12 +11,12 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <go.version>14.1.0</go.version>
+        <go.version>14.4.0</go.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.thoughtworks.go</groupId>
+            <groupId>cd.go.plugin</groupId>
             <artifactId>go-plugin-api</artifactId>
             <version>${go.version}</version>
             <scope>provided</scope>
