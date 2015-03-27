@@ -6,7 +6,7 @@
 
     <groupId>com.thoughtworks.go</groupId>
     <artifactId>deb-repo-poller</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -25,15 +25,10 @@
         <dependency>
             <groupId>com.thoughtworks.go</groupId>
             <artifactId>deb-repo-query</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
 
         <!-- apache commons -->
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.4</version>
-        </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
@@ -142,7 +137,7 @@
                         <configuration>
                             <tasks>
                                 <delete dir="dist"/>
-                                <mkdir dir="dist" />
+                                <mkdir dir="dist"/>
 
                                 <copy todir="${project.basedir}/dist">
                                     <fileset dir="${project.basedir}/target">
