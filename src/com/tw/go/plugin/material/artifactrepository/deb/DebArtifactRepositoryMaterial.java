@@ -5,7 +5,6 @@ import com.thoughtworks.go.plugin.api.material.packagerepository.PackageMaterial
 import com.tw.go.plugin.material.artifactrepository.deb.config.DebRepositoryConfiguration;
 import com.tw.go.plugin.material.artifactrepository.deb.poller.DebRepositoryPoller;
 
-@Extension
 public class DebArtifactRepositoryMaterial implements PackageMaterialProvider {
 
     public DebRepositoryConfiguration getConfig() {
