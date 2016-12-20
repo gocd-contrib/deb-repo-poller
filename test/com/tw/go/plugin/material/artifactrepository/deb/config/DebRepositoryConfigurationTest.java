@@ -131,7 +131,7 @@ public class DebRepositoryConfigurationTest {
         try {
             debRepositoryConfiguration.testConnection(packageConfigurations, repositoryConfigurations);
         } catch (Exception e) {
-            fail("");
+            fail("Got exception: " + e.getMessage());
         }
     }
 

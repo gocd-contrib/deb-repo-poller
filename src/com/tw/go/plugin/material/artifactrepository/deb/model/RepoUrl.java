@@ -24,7 +24,7 @@ public class RepoUrl {
     static {
         map.put("file", fileBasedConnectionChecker);
         map.put("http", httpConnectionChecker);
-        //map.put("https", httpConnectionChecker);
+        map.put("https", httpConnectionChecker);
     }
 
     public RepoUrl(String url, String user, String password) {

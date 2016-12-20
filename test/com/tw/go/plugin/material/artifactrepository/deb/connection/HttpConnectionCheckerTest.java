@@ -6,20 +6,21 @@ import org.junit.Test;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.containsString;
 
 public class HttpConnectionCheckerTest {
     @Test
     public void shouldNotThrowExceptionIfCheckConnectionToTheRepoPasses() {
-        new HttpConnectionChecker().checkConnection("http://in.archive.ubuntu.com/ubuntu/dists/saucy/main/binary-amd64/", new Credentials(null, null));
+        new HttpConnectionChecker().checkConnection("http://archive.ubuntu.com/ubuntu/dists/xenial/main/binary-amd64/", new Credentials(null, null));
     }
 
     @Test
     public void shouldFailCheckConnectionToTheRepoWhenUrlIsNotReachable() {
         try {
-            new HttpConnectionChecker().checkConnection("http://sifystdgobgr101.thoughtworks.com:8080/tfs/1.txt", new Credentials(null, null));
+            new HttpConnectionChecker().checkConnection("https://build.go.cd/go/api/support", new Credentials(null, null));
             fail("should fail");
         } catch (Exception e) {
-            assertThat(e.getMessage(), is("HTTP/1.1 401 Unauthorized"));
+            assertThat(e.getMessage(), containsString("HTTP/1.1 401"));
         }
     }
 }

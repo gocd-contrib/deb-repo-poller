@@ -30,6 +30,7 @@ public class RepoUrlTest {
         assertRepositoryUrlValidation("http://correct.com/url", null, null, new ArrayList<ValidationError>(), true);
         assertRepositoryUrlValidation("file:///foo.bar", null, null, new ArrayList<ValidationError>(), true);
         assertRepositoryUrlValidation("file:///foo.bar", "user", "password", asList(new ValidationError(REPO_URL, "File protocol does not support username and/or password.")), false);
+        assertRepositoryUrlValidation("https://correct.com/url", null, null, new ArrayList<ValidationError>(), true);
     }
 
     @Test
@@ -82,10 +83,10 @@ public class RepoUrlTest {
     @Test
     public void shouldFailCheckConnectionToTheRepoWhenHttpUrlIsNotReachable() {
         try {
-            new RepoUrl("http://sifystdgobgr101.thoughtworks.com:8080/tfs/", null, null).checkConnection();
+            new RepoUrl("https://build.go.cd/go/api/support", null, null).checkConnection();
             fail("should fail");
         } catch (Exception e) {
-            assertThat(e.getMessage(), is("HTTP/1.1 401 Unauthorized"));
+            assertThat(e.getMessage(), containsString("HTTP/1.1 401"));
         }
     }
 
@@ -101,8 +102,8 @@ public class RepoUrlTest {
 
     @Test
     public void shouldNotThrowExceptionIfCheckConnectionToTheRepoPasses() {
-        new RepoUrl("http://in.archive.ubuntu.com/ubuntu/dists/saucy/main/binary-amd64/", null, null).checkConnection();
-        new RepoUrl("http://in.archive.ubuntu.com/ubuntu/dists/saucy/main/binary-amd64", null, null).checkConnection();
+        new RepoUrl("http://archive.ubuntu.com/ubuntu/dists/xenial/main/binary-amd64/", null, null).checkConnection();
+        new RepoUrl("http://archive.ubuntu.com/ubuntu/dists/xenial/main/binary-amd64", null, null).checkConnection();
     }
 
     @Test
