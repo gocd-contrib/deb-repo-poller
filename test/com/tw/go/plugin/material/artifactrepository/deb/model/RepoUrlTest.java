@@ -13,9 +13,9 @@ import java.util.List;
 import static com.tw.go.plugin.material.artifactrepository.deb.constants.Constants.REPO_URL;
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static org.junit.internal.matchers.StringContains.containsString;
 
 public class RepoUrlTest {
     @Test
@@ -83,7 +83,7 @@ public class RepoUrlTest {
     @Test
     public void shouldFailCheckConnectionToTheRepoWhenHttpUrlIsNotReachable() {
         try {
-            new RepoUrl("https://build.go.cd/go/api/support", null, null).checkConnection();
+            new RepoUrl("https://build.gocd.io/go/api/support", null, null).checkConnection();
             fail("should fail");
         } catch (Exception e) {
             assertThat(e.getMessage(), containsString("HTTP/1.1 401"));
