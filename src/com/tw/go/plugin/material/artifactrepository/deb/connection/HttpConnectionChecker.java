@@ -1,35 +1,52 @@
 package com.tw.go.plugin.material.artifactrepository.deb.connection;
 
 import com.tw.go.plugin.material.artifactrepository.deb.model.Credentials;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.params.HttpConnectionParams;
+
+import org.apache.http.HttpStatus;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.*;
 
 import java.io.IOException;
 
 public class HttpConnectionChecker implements ConnectionChecker {
 
     public void checkConnection(String url, Credentials credentials) {
-        HttpClient client = new HttpClient();
-        client.getParams().setIntParameter(HttpConnectionParams.CONNECTION_TIMEOUT, getSystemProperty("deb.repo.connection.timeout", 10 * 1000));
-        client.getParams().setSoTimeout(getSystemProperty("deb.repo.socket.timeout", 5 * 60 * 1000));
-        if (credentials.isComplete()) {
-            org.apache.commons.httpclient.Credentials usernamePasswordCredentials = new UsernamePasswordCredentials(credentials.getUser(), credentials.getPassword());
-            client.getState().setCredentials(AuthScope.ANY, usernamePasswordCredentials);
-        }
-        GetMethod method = new GetMethod(url);
-        method.setFollowRedirects(false);
-        try {
-            int returnCode = client.executeMethod(method);
-            if (returnCode != HttpStatus.SC_OK) {
-                throw new RuntimeException(method.getStatusLine().toString());
+        try (CloseableHttpClient client = getHttpClient(credentials)) {
+            HttpGet method = new HttpGet(url);
+            try (CloseableHttpResponse response = client.execute(method)) {
+                if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+                    throw new RuntimeException(response.getStatusLine().toString());
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    CloseableHttpClient getHttpClient(Credentials credentials) {
+        BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+
+        if (credentials.isComplete()) {
+            credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(credentials.getUser(), credentials.getPassword()));
+        }
+
+        RequestConfig requestConfig = RequestConfig.custom().
+                setConnectTimeout(getSystemProperty("deb.repo.connection.timeout", 10 * 1000)).
+                setSocketTimeout(getSystemProperty("deb.repo.socket.timeout", 5 * 60 * 1000)).
+                setAuthenticationEnabled(true).
+                setMaxRedirects(10).
+                build();
+
+        return HttpClients.custom().
+                setRedirectStrategy(new DefaultRedirectStrategy()).
+                setDefaultCredentialsProvider(credentialsProvider).
+                setDefaultRequestConfig(requestConfig).
+                setTargetAuthenticationStrategy(new TargetAuthenticationStrategy()).
+                build();
     }
 
     private int getSystemProperty(String key, int defaultValue) {
